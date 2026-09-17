@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="scrip.js">
+    <title>Nuevo Prestamo</title>
+</head>
+<body>
+<h1>Registrar Préstamo</h1>
+
+<form action="/nuevo_prestamo" method="POST">
+<label for="alumno">Seleccionar Alumno:</label>
+<select name="alumno" id="alumno" required>
+{% for alu in alumnos %}
+<option value="{{ alu.dni }}">{{ alu.apellido }}, {{ alu.nombre }}</option>
+{% endfor %}
+</select>
+
+<label for="componente">Componente a Retirar:</label>
+<select name="componente" id="componente" required>
+{% for comp in componentes %}
+<option value="{{ comp.id_componente }}">{{ comp.nombre }}</option>
+{% endfor %}
+</select>
+
+<label for="fecha_retiro">Fecha de Retiro:</label>
+<input type="date" name="fecha_retiro" id="fecha_retiro" required>
+
+<br>
+<button type="submit">Guardar Préstamo</button>
+<a href="/">Cancelar</a>
+</form>
+</body>
+</html>
