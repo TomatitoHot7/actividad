@@ -6,9 +6,9 @@ app = Flask(__name__)
 def conectar_db():
     return mysql.connector.connect(
         host="localhost",
-        user="root", # Configurar según su usuario de MySQL
-        password="tu_password", # Configurar según su contraseña
-        database="club_ciencias" # La base de datos del ejercicio anterior
+        user="root",
+        password="tu_password", 
+        database="club_ciencias" 
     )
 
 # esto muestra el inventario y los préstamos actuales
@@ -35,7 +35,7 @@ def index():
     cursor.close()
     conexion.close()
 
-    # Pasamos los datos a la plantilla HTML
+    # Pasamos los datos al HTML
     return render_template('index.html', componentes=componentes, prestamos=prestamos)
 
 
