@@ -3,26 +3,25 @@ import mysql.connector
 
 app = Flask(__name__)
 
-# Configuración de la conexión a MySQL
 def conectar_db():
     return mysql.connector.connect(
         host="localhost",
-        user="root", # Configurar según su usuario de MySQL
-        password="tu_password", # Configurar según su contraseña
-        database="club_ciencias" # La base de datos del ejercicio anterior
+        user="root",
+        password="tu_password", 
+        database="club_ciencias" 
     )
 
-# Ruta principal: Muestra el inventario y los préstamos actuales
+# esto muestra el inventario y los préstamos actuales
 @app.route('/')
 def index():
     conexion = conectar_db()
     cursor = conexion.cursor(dictionary=True) # dictionary=True para acceder por nombre de columna
 
-    # 1. Traer todos los componentes
+    # Trae todos los componentes
     cursor.execute("SELECT * FROM componentes")
     componentes = cursor.fetchall()
 
-    # 2. Traer los préstamos uniendo tablas para ver nombres en vez de IDs
+    # Trae los préstamos uniendo tablas para ver nombres en vez de IDs
     consulta_prestamos = """
     SELECT p.id_prestamo, a.nombre AS alumno_nom, a.apellido AS alumno_ape,
     c.nombre AS componente_nom, p.fecha_retiro, p.fecha_devolucion
@@ -36,7 +35,7 @@ def index():
     cursor.close()
     conexion.close()
 
-    # Pasamos los datos a la plantilla HTML
+    # Pasamos los datos al HTML
     return render_template('index.html', componentes=componentes, prestamos=prestamos)
 
 
@@ -52,17 +51,17 @@ def nuevo_prestamo():
         id_comp = request.form['componente']
         fecha_ret = request.form['fecha_retiro']
 
-        # Insertamos el registro en la base de datos
+        # Se inserta el registro en la base de datos
         query = "INSERT INTO prestamos (id_alumno, id_componente, fecha_retiro) VALUES (%s, %s, %s)"
         cursor.execute(query, (dni_alumno, id_comp, fecha_ret))
         conexion.commit() # Guardamos los cambios
 
         cursor.close()
         conexion.close()
-        return redirect(url_for('index')) # Redirige a la página principal
+        return redirect(url_for('index')) # Lleva a la pagina principal
 
     else:
-        # Si entran por GET, necesitamos los alumnos y componentes para llenar los selectores del formulario
+        # Si entran por GET, necesitamos los alumnos y componentes para llenar los lugares del formulario
         cursor.execute("SELECT dni, nombre, apellido FROM alumnos")
         alumnos = cursor.fetchall()
 
